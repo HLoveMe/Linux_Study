@@ -1,5 +1,22 @@
 # Linux_Study
 
+* 目录
+
+	```
+	/bin /sbin  /usr/bin /usr/sbin 都是保存系统命令
+		/bin /usr/bin 前者为都可使用的命令
+		/sbin  /usr/sbin 只能是root 才能使用
+	/usr 系统软件资源
+	/boot 启动目录
+	/etc 默认配置文件
+	/home 是普通用户
+	/root root用户
+	/bin 函数库
+	/meida /mnt /misc 挂载目录
+	
+	
+	```
+
 * 命令
 
 	com [选项] [参数]
@@ -54,7 +71,7 @@
 		```
 		mkdir datas
 		
-		mkdir -p A/B/datas 递归创建
+		mkdir -p  A/B/datas 递归创建
 		```
 		
 		
@@ -68,4 +85,31 @@
 			cd -  进入上次所在目录
 		
 		```
+		
+	* 删除
+		
+		* rmdir 删除空目录
+		* rm 
+			* -f 强制
+			* -r 删除目录
+			
+			```
+			rm -rf  强制删除
+			```	
+			
+	* cp赋值
+		
+		* -r 复制目录
+		* -p 连带文件属性一起复制
+		* -d 如果是链接文件 则复制链接属性
+		* -a == -pdr
+
+	* mv 剪切
+
+		```
+		mv [源] [目标]
+		
+		mv a.js b.js   改名
+		```
+
 		

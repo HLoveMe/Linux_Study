@@ -43,5 +43,29 @@
 	 * 参数
 
 	 	* ls -a xx.txt 查看该文件的属性
-
 	 	
+* pwd 查看当前所在路径
+	
+	 	
+* 文件创建命令
+
+	* mkdir
+
+		```
+		mkdir datas
+		
+		mkdir -p A/B/datas 递归创建
+		```
+		
+		
+	* cd 切换目录
+
+		```
+			cd ===> cd ~
+			
+			cd ../
+			
+			cd -  进入上次所在目录
+		
+		```
+		

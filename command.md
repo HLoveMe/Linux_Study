@@ -77,9 +77,8 @@
 	 		ls -lad ~   查看~目录属性
 	 	```
 	 * -i 文件的i节点  ID
+	 * -h 优化文件大小显示
 	 * -l 显示文件详细内容
-
-	 	* -lh 优化文件大小显示
 
 	 	```
 		drwxr-xr-x  14 AA  DD      476  3 23 17:16 小东西
@@ -177,3 +176,80 @@
 			
 			有相同的权限
 			```
+			
+	* 文件搜索
+
+		* locate 文件名 搜索 【快】
+
+			```
+			locate [文件名]
+				在/var/lib/mlocate 数据库搜索 【一天更新】
+			updatedb 更新数据库
+			
+			/etc/locate.conf locate搜索配置文件
+			```
+		* whereis which 命令 搜索
+
+			```
+			whereis 搜索系统命名所在地方
+				-b 查看执行文件
+				-m 查看文档
+			which 系统|用户 命令
+				
+			```
+		* find 文件搜索 【慢】 [find [范围] [条件]]
+			
+			```
+			find / -name xxx.js
+			find / -name "*?.JPG"
+			```
+			* -name
+			* -iname 不区分大小写
+			* -user 指定所有者
+				
+				```
+				find / -user zhuzihao 
+				```
+			* -nouser 没有所有值
+
+				```
+				find / -nouser
+				```
+			* -mtime  修改时间
+			* -atime 访问时间
+			* -ctime 改变文件属性
+				```
+				-10 十天内
+				10 十天当前修改
+				+10十天之前修改
+				```
+			* -size 大小
+
+				```
+				-25k 小于
+				25k
+				+25k 大于25k
+				
+				20M
+				-20M
+				```
+				
+			* -inum 通过i[i节点]搜文件
+
+			* -a and 多个条件满足
+			* -o or 或
+
+				```
+				find / -size +20k -a -size 50k
+					[20-50]k文件
+				```
+			* "-exec [命令] {} \;" 对找到的文件进行处理
+				
+				```
+				find ./ -size +10k -a -size -100k -exec ls -hl {} \;
+				```
+				
+			
+			
+			
+		* grep 字符串搜索

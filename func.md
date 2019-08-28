@@ -23,7 +23,14 @@
 	```
 	
 	```
-	登入运行
+	打开终端运行
 	/etc/profile.d/ 目录下新建sh  会被[/etc/profile]自动扫描运行
 	```
-	
+
+	```
+	打开终端运行
+	.bashrc 
+		/usr/xx/node xx.js
+		
+	source .bashrc
+	```	

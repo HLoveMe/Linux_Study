@@ -66,3 +66,8 @@
 	*  ~/.bash_profile 用户设置环境变量 登入执行一次
 
 	* ~/.bashrc 设置bash信息  每次打开shell 被执行
+
+	
+	```
+	source xxx.file
+	```

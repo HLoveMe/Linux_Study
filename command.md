@@ -143,7 +143,7 @@
 		* whereis which 命令 搜索
 
 			```
-			whereis 搜索系统命名所在地方
+			whereis 搜索命令所在地方
 				-b 查看执行文件
 				-m 查看文档
 			which 系统|用户 命令
@@ -225,4 +225,136 @@
 			grep -n -r "rxjs" ./* 该目录下[递归]
 			
 			```
+	* man 查看命令文档
+		
+		```
+		man ls 查看ls命令文档
+		
+		LS(1)                     BSD General Commands Manual                    LS(1)
+		
+		NAME
+		     ls -- list directory contents
+		
+		SYNOPSIS
+		     ls [-ABCFGHLOPRSTUW@abcdefghiklmnopqrstuwx1] [file ...]
+		
+		DESCRIPTION
+			.......
+			-A      List all entries except for . and ...  Always set for the super-
+             user.
+
+		     -a      Include directory entries whose names begin with a dot (.).
+		     
+		     
+		```
+		
+		* 命令查看
+
+			* man ls 只能查看系统命令 【cd shell自带命令无法查看】
+			* whereis ls  无执行文件的为安装命令 不是系统命令 【/bin/ls 为安装命令】
+			* help cd 查看cd命令   无法查看shell 自带命名
+		
 	* chkconfig [学习]
+
+	* 文件解压缩
+
+		```
+		.zip .gz .bz2 格式 解压缩
+		```
+		
+		* .zip
+
+			```
+			压缩文件
+			 zip 压缩文件名  源文件 【zip a.zip a.txt】
+			  
+			压缩目录
+			 zip -r 压缩文件名  源目录 [zip -r images.zip images]
+			 
+			解压缩
+				unzip xx.zip文件
+			```
+			
+		* .gz
+
+			```
+			gzip 源文件 》压缩为.gz压缩格式  原文件消失
+			
+			gzip -c abc > abc.gz 压缩为.gz压缩格式 原文件存在
+			
+			gzip -r 目录 | 压缩目录下所有文件
+			
+			gzip -d aa.gz 解压
+			gunzip  aa.gz
+			gunzip -r images
+			
+			```
+			
+		* .bz2
+
+			```
+			bzip2 原文件 | 不保留原文件
+			
+			bzip2 -k 原文件 |保留元原件
+			
+			bzip2 -d 文件 | bunzip2 文件 解压缩
+			
+			不能压缩目录
+			```
+		
+		* 【为解决上面打包文件夹不方便问题】
+			
+			* 1 tar  打包 
+	
+				```
+				tar -cvf 输出文件名 原文件|文件夹
+					
+				tar -xvf 文件  解压
+				```
+		
+			* 2 打包后在压缩所需格式
+
+				```
+				zip a.tar
+				
+				bzip2 a.tar
+				```
+				
+			* 合并 1 2
+
+				```
+				tar -cvfz aa.tar.gz 原文件1 目录2 [打包多个] -C /x/a/
+				tar -xvfz aa.tar.gz
+				
+				tar -cvfj aa.tar.bz2 原文件1 目录2
+				tar -xvfj aa.tar.bz2			
+				```
+				
+			```
+				-c 打包
+				-x 解压
+				-v显示过程
+				-f指定打包输出名称
+				-C 指定输出路径
+				-t 查看压缩包内容
+			```
+			
+	* 关机
+
+		shundown 选项 时间
+
+		```
+		 -h 关机
+		 -r 重启
+		 -c 取消上一个关机命令
+		 
+		 shutdown -h now
+		 shutdown -r 12:00
+		 shutdown -c
+		 
+		```
+	* logout 退出登入窗口 【关闭shell】
+
+		```
+		一定记得关闭登入窗口
+		```

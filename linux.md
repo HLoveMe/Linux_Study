@@ -71,3 +71,49 @@
 	```
 	source xxx.file
 	```
+* 重定向 > | >>
+	
+	* > | >>都是定向到文件 都是没有文件就创建
+	* > 会覆盖之前的文件  >!
+	* >> 会追加到最后一行
+
+	```
+	>缺省值是 1   > === 1>
+	<缺省值为 0   < === 0<
+	0标准输入 ; 1标准输出  ; 2标准错误输出
+
+	```
+	```
+	echo 朱子豪 > a.txt  echo的输出 作为 >的标准输入 重定向到文件a.txt
+	
+	echo hello 1>&2 | grep aaa
+		echo hello    1>&2                     | grep aaa
+				hello[作为标准输出]作为标准错误输出        null  最终===> hello
+				
+	echo hello 2>&1 | grep aaa
+		echo hello   2>&1                               | grep aaa
+				   null无错误标准输出  hello[标准输出]         null 最终===>hello
+	
+	```
+	
+	```
+	标准输入 0
+	cat 0< a.txt > b.txt  读取a.txt作为输入 ===> cat 内容 > b.txt
+	
+	read name 0< test //读取test作为输入 到name 变量中
+	echo $name 打印name
+	 
+	```
+	
+	```
+	改变标准输出 
+	
+	exec 1> out 改变标准输入为out文件
+		
+	ls  屏幕没有打印。所有输出到out文件中 【另开cmd查看】
+	```
+	```
+	自定义符号  exec 6>test
+	
+	echo zzh 1>&6
+	```

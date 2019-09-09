@@ -44,10 +44,14 @@
 
 	 	* ls -a xx.txt 查看该文件的属性
 * du 查看文件大小
-
+	
+	```
+	du [选项][文件]
+	```
 	* -a 包含隐藏文件
 	* -h 大小格式化显示  K M G	 	
-	* -s 去掉统计过程
+	* -m -k 使用M K输出大小
+	* -s 直接显示统计总和大小
 
 	```
 	du -sh 统计当前文件夹的大小
@@ -142,12 +146,76 @@
 		```
 		查看当前工作目录
 		```
-	* cat [学习]
+		
+	* cat 显示文件所有
+	* head 显示文件开头几行
+		
+		* -n 指定行数
+		* -c 指定字符数
+		
+	* tail 显示文件末尾10行
 
-	* chmod [学习]
-	
+		* -c tail -c 10 显示最后10字节
+		* -n 指定行数  -n +20 显示[20 ~]
+		* tail -25 xx 最后25行
+		* -f 追踪文件修改
+		* -F
+
+	* chmod 修改权限
+
+		* r 4 读
+		* w 2 写
+		* x 1 执行
 			
-	* 搜索
+		```
+		chmod 755 ab.sh
+		
+		chmod -R 600 ./shs/
+		```
+		* 选项
+			
+			* -R 表明对目录以及目录下所有文件进行操作 必须有可读r 权限
+				
+				```
+				chmod -R a=rw ./
+				```
+			* --reference copy某个文件的权限
+
+				```
+				 chmod --reference=./a.js  b.js
+				```
+		* 八进制进行权限操作
+
+			```
+			chmod 777 ./a.txt
+			```
+		* 符号组合
+			
+			```
+			u 当前用户
+			g 同组用户
+			a 所有用户
+			o 其他用户
+			
+			r | w | x
+			
+			s
+			t 只有所有者才能删除文件
+			
+			+ 增加权限   +x
+			- 移除权限  -x
+			= 赋值权限  =rxw
+			```
+			```
+			chmod g+w ./a.js  同组用户增加w
+			
+			chmod o= ./a.js  删除同组用户 所有权限  
+			
+			chmod a-w ./a.js 删除所有用户 w权限
+			
+			chmod u=rwx, g=rw, o=r ./test.log
+			```
+	* 文件操作
 
 		* locate 文件名 搜索 【快】
 
@@ -173,8 +241,20 @@
 			find / -name xxx.js
 			find / -name "*?.JPG"
 			```
-			* -name
+			* ! 取反 	find / ! -name "*zzh.txt"
+			* -name 指定名称或者正则
 			* -iname 不区分大小写
+
+				```
+				find ~ ( -iname 'jpeg' -o -iname 'jpg' ) 
+				find ~ \( -iname '*jpeg' -o -iname '*jpg' \) -type f
+				```
+			* -regex 路径匹配正则
+			* -iregex 路径匹配正则  不区分大小写
+			
+				```
+				find ./ -regex ".*\(\.js\|\.md\)$"
+				```
 			* -user 指定所有者
 				
 				```
@@ -184,6 +264,27 @@
 
 				```
 				find / -nouser
+				```
+			* -maxdepth | -mindepth
+
+				```
+				-maxdepth 3
+				指定深度
+				```
+			* -perm 根据权限
+				
+				```
+					-perm 755
+				```
+			* -type 根据类型
+
+				```
+				-type f|d\l\c\b\s\p
+				```
+			* -delete 删除搜索到的文件
+
+				```
+				find /  -name '.log' -delete
 				```
 			* -mtime  修改时间
 			* -atime 访问时间
@@ -231,9 +332,13 @@
 			* -a | --text  二进制数据也要查找
 			* -c 仅仅显示查找的总行数
 			* -i 忽略大小写
+			* -E 使用正则[不加也是可以的] grep -e zzh*+(love)$ ./a.txt
 			* -n 显示行数
 			* -o 会把你指定的搜索内容显示出来
 			* -d | -r 如果目标是文件夹 必须指定
+			* -l  仅仅列出符合条件的文件名称
+			* -v  显示 正常搜索的结果=>取反  
+				* grep -v "zzh" ./a.txt 显示没有zzh的行
 
 			```
 			默认只能文件查找 
@@ -242,7 +347,45 @@
 			
 			grep -n -r "rxjs" ./* 该目录下[递归]
 			
+			grep -lr log /var/log 显示符合条件的 文件名称
 			```
+			
+		* sort 对文件类容进行排序
+
+		* wc 统计文件的字节数、字数、行数
+
+		* cut  用来显示行中的指定部分，删除文件中指定字段
+
+			```
+			zzh,98,yes
+			zm,89,no
+			sx,100,yes
+			```
+			
+			* -d 字段分割符 default:TAB
+
+				```
+				cut -d , source.txt
+				```
+			* -f 显示指定字段部分内容
+
+				```
+				cut -d , -f  1 source.txt
+				
+				zzh
+				zm
+				sx
+				```
+			* -b 仅显示行中指定直接范围的内容；
+
+			* -c：仅显示行中指定范围的字符；
+
+				```
+				cut -c1-3 a.txt 显示1-3个字符
+				cut -c-2  a.txt 显示前两个字符
+				cut -c5-  a.txt 显示第五个字符到结尾
+				```
+		
 	* man 查看命令文档
 		
 		```
@@ -473,3 +616,65 @@
 		 	
 		 	lsof -i:8081 +r 10   一直执行 没有输出停止
 		 	```
+	
+* w 显示当前登入用户的信息
+
+* ps 显示系统进程信息 【默认显示当前命令窗口运行的进行】
+
+	* -A 显示[系统]所有程序
+	* -c 增加 显示 CLS 和 PRI 信息
+	* c 增肌显示COMMAND  运行的命令
+	* -C 显示指定命令的 运行状态
+
+		```
+		ps -C su
+		```
+	* -d 显示所有程序 【不包括阶段作业领导者的程序】 【-A】
+
+	* -e == -A
+	* e 列出程序时，显示每个程序所使用的环境变量
+	* -f 显示UID,PPIP,C与STIME栏
+	* f 用ASCII字符显示树状结构，表达程序间的相互关系。
+	* -m | m 
+	* -N 显示出来当前命令行 以外的进程
+	* -u 指定用户
+	* -j或j：采用工作控制的格式显示程序状况。
+	* -l或l：采用详细的格式来显示程序状况。
+
+	```
+	ps axo pid,comm,pcpu # 查看进程的PID、名称以及CPU 占用率
+	ps aux | sort -rnk 4 # 按内存资源的使用量对进程进行排序
+	ps aux | sort -nk 3  # 按 CPU 资源的使用量对进程进行排序
+	ps -A # 显示所有进程信息
+	ps -u root # 显示指定用户信息
+	ps -efL # 查看线程数
+	ps -e -o "%C : %p :%z : %a"|sort -k5 -nr # 查看进程并按内存使用大小排列
+	ps -ef # 显示所有进程信息，连同命令行
+	ps -ef | grep ssh # ps 与grep 常用组合用法，查找特定进程
+	ps -C nginx # 通过名字或命令搜索进程
+	ps aux --sort=-pcpu,+pmem # CPU或者内存进行排序,-降序，+升序
+	ps -f --forest -C nginx # 用树的风格显示进程的层次关系
+	ps -o pid,uname,comm -C nginx # 显示一个父进程的子进程
+	ps -e -o pid,uname=USERNAME,pcpu=CPU_USAGE,pmem,comm # 重定义标签
+	ps -e -o pid,comm,etime # 显示进程运行的时间
+	ps -aux | grep named # 查看named进程详细信息
+	ps -o command -p 91730 | sed -n 2p # 通过进程id获取服务名称
+	```
+	
+* top  显示系统进程信息
+
+	```
+	ps 获取某一时刻的系统信息
+	top 展示实时的系统信息 不能显示全部进程
+	```
+	
+	```
+	q：退出 top。
+	h：显示帮助文档，也就是哪些按键可以使用。按下任意键返回，按 q 回到 top 命令的主界面。
+	B：大写的 B，加粗某些信息。
+	f：在进程列表中添加或删除某些列。按 q 回到 top 命令的主界面。
+	F：改变进程列表排序所参照的列。默认情况下，是按照 %CPU 那一列来排序，按 q 回到 top 命令的主界面。
+	u：依照用户来过滤显示。可以输入用户名，按回车。
+	k：结束某个进程。会让你输入要结束的进程的 PID。
+	s：改变刷新页面的时间。默认的，页面每隔 3 秒刷新一次。
+	```

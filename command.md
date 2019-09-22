@@ -786,3 +786,18 @@
 	 ifconfig eth0 mtu 1500 #设置能通过的最大数据包大小为 1500 bytes
 	```
 	
+* netstat 查看网络状况
+
+	```
+	-a 查看所有Socket
+	-u 查看UDP
+	-t 查看TCP
+	-c 持续查看  打印
+	-i 显示网络界面信息表单 网卡信息
+	-l 显示Listen状态的 socket
+	-n 直接显示ip地址
+	-s 显示统计信息
+	-p 增加一项输出   PID/Program name
+	```
+
+	

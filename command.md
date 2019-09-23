@@ -800,4 +800,134 @@
 	-p 增加一项输出   PID/Program name
 	```
 
+* iptables
+
+	* 基本参数
 	
+		```
+		-P	设置默认策略:iptables -P INPUT (DROP
+		-F	清空规则链
+		-L	查看规则链
+		-A	在规则链的末尾加入新规则
+		-I	num 在规则链的头部加入新规则
+		-D	num 删除某一条规则
+		-s	匹配来源地址IP/MASK，加叹号"!"表示除这个IP外。
+		-d	匹配目标地址
+		-i	网卡名称 匹配从这块网卡流入的数据
+		-o	网卡名称 匹配从这块网卡流出的数据
+		-p	匹配协议,如tcp,udp,icmp
+		-j 指定规则采取的动作
+		--dport num	匹配目标端口号
+		--sport num	匹配来源端口号
+		```
+	* 规则链
+	
+		```
+		INPUT链 ：处理输入数据包。
+		OUTPUT链 ：处理输出数据包。
+		FORWARD链 ：处理转发数据包。
+		PREROUTING链 ：用于目标地址转换（DNAT）。将内部服务 公开到 外部网络
+		POSTROUTING链 ：用于源地址转换（SNAT）。代理内部客户访问外部网络
+		```
+	* 表名
+		
+		```
+		raw ：高级功能，如：网址过滤。
+		mangle ：数据包修改（QOS），用于实现服务质量。
+		nat ：地址转换，用于网关路由器。
+		filter ：包过滤，用于防火墙规则。
+		```
+		
+		```
+		filter 定义允许或者不允许的，只能做在3个链上：INPUT ，FORWARD ，OUTPUT
+		nat 定义地址转换的，也只能做在3个链上：PREROUTING ，OUTPUT ，POSTROUTING
+		mangle功能:修改报文原数据，是5个链都可以做：PREROUTING，INPUT，FORWARD，OUTPUT，POSTROUTING	
+		```
+	* 动作
+	
+		```
+		ACCEPT ：接收数据包。
+		DROP ：丢弃数据包。
+		REDIRECT ：重定向、映射、透明代理。
+		SNAT ：源地址转换。代理内部客户访问外部网络
+		DNAT ：目标地址转换。将内部服务 公开到 外部网络
+		MASQUERADE ：IP伪装（NAT），用于ADSL。
+		LOG ：日志记录。
+		```
+		
+  	*	 匹配顺序
+	
+		```
+		A
+		B
+		C
+		
+		发起baidu.com 请求 会依次匹配ABC 如果某一个匹配上 就会执行[容许|阻止] 停止匹配链。	
+		```
+ 	* 设置规则
+
+		 ```
+		 iptables -t 表名 <-A/I/D/R> 规则链名 [规则号] <-i/o 网卡名> -p 协议名 <-s 源IP/源子网> --sport 源端口 <-d 目标IP/目标子网> --dport 目标端口 -j 动作
+		 ```
+	 
+	* 常见命令
+
+		```
+		iptables -L -n --line-numbers 会显示规则的序号
+		
+		iptables -D INPUT 8 删除INPUT序号为8的规则
+		
+		iptables -A INPUT -s 192.168.1.5 -j DROP
+				-A 在末尾追加
+				INPUT 表明是 接受访问
+				-s 指明 ip 192.168.1.5
+				-j DROP 禁止
+			禁止ip端的ip 访问这台电脑
+			
+		iptables -t nat -A POSTROUTING -s 192.168.188.0/24 -j SNAT --to-source 210.14.67.127
+			-t nat 增加到nat[转发表]
+			-A 加到最后
+			POSTROUTING 源地址转换
+			-s 192.168.188.0/24 指定端口
+			-j SNAT --to-source 210.14.67.127  源地址转换
+			
+		 	内网192.168.188.0/24能连接到公网210.14.67.7
+		 	
+		iptables -t nat -A PREROUTING -d 192.168.10.88 -p tcp --dport 80 -j DNAT --to-destination 192.168.10.88:8080
+		iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+		
+			1：来自192.168.10.88的访问80端口映射到8080端口
+			2：所有的访问 80端口映射到8080端口
+			
+		iptables -t nat -A OUTPUT -p tcp -d 127.0.0.1 --dport 80 -j DNAT --to 127.0.0.1:8080
+			将本机访问80端口的转发到本机8080
+			回环地址 只经过OUTPUT 不会通过 PREROUTING
+			
+		```
+	* 一个使用场景
+
+		```
+		#!/bin/bash
+		iptables -A OUTPUT -p tcp -d bigmart.com -j ACCEPT
+		iptables -A OUTPUT -p tcp -d bigmart-data.com -j ACCEPT
+		iptables -A OUTPUT -p tcp -d ubuntu.com -j ACCEPT
+		iptables -A OUTPUT -p tcp -d ca.archive.ubuntu.com -j ACCEPT
+		iptables -A OUTPUT -p tcp --dport 80 -j DROP
+		iptables -A OUTPUT -p tcp --dport 443 -j DROP
+		iptables -A INPUT -p tcp -s 10.0.3.1 --dport 22 -j ACCEPT
+		iptables -A INPUT -p tcp -s 0.0.0.0/0 --dport 22 -j DROP
+		```
+		```
+		仅仅容许访问
+			bigmart.com
+			bigmart-data.com
+			ubuntu.com
+			ca.archive.ubuntu.com 
+			
+		其他任何80[http] 443[https]的访问都会被拒绝
+		
+		容许 10.0.3.1:22 的input连接
+		
+		不容许0.0.0.0/0的访问
+		```
+		![](./images/171808krznnhnrcb5n0h68.jpg)

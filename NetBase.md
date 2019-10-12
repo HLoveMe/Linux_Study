@@ -132,3 +132,58 @@
 	
 		
 	```
+	
+* 配置网络配置文件
+	
+	```
+	/etc/host.conf  配置域名服务客户端的控制文件
+
+	/etc/hosts 配置主机名和IP地址的映射
+	
+	/etc/resolv.conf 域名服务客户端的配置文件，指定域名服务器的IP地址
+	
+	/etc/network/interfaces 用于设置网络配置信息(IP地址，子网掩码，网关IP等)
+
+	```
+
+	* 配置ip 
+	
+		 /etc/network/interfaces | /etc/network/interfaces.d
+		
+			```
+			#网卡名称 enp0s3 静态ip
+			auto enp0s3
+			iface enp0s3 inet static
+			address 192.168.0.1 #ip地址
+			netmask  255.255.255.0#子网掩码
+			gateway  192.168.0.1#网关
+			```
+			```
+			#网卡名称 enp0s3 动态ip
+			局域网有dhcp服务器
+			auto enp0s3
+			iface enp0s3 inet dhcp
+			```
+			
+	* 配置dns [resolvconf 重启dns]
+		
+		```
+		ip配置 最后增加dns配置
+		dns-nameservers 223.5.5.5
+		```
+		```
+		/etc/resolvconf/resolv.conf.d/base 
+		增加
+		nameserver 223.5.5.5
+		```
+	* 重启
+
+		```
+		/etc/init.d/networking restart
+		
+		或者（下面是指定启动关闭某个网卡命令）
+		ifdown enp0s3    （关闭网卡enp0s3）
+		ifup   enp0s3    (启动网卡enp0s3)
+		sudo service network-manager restart 
+
+		```

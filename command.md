@@ -862,6 +862,11 @@
 	-s 显示统计信息
 	-p 增加一项输出   PID/Program name
 	```
+	```
+	netstat -tuln
+	
+	netstat -rn 网络信息（dns 网关。。。）
+	```
 
 * iptables
 

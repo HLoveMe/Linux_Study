@@ -80,6 +80,7 @@
 		
 		echo "111 222 $name "
 		```
+	
 	* 数组
 
 		```
@@ -227,6 +228,25 @@
 			$-	显示Shell使用的当前选项，与set命令功能相同
 		}
 		```
+	* 变量作用域
+
+		```
+		var1="AAA"
+		var2="BBB" 
+		echo $var1 $var   "AAA" "BBB"
+		
+		function dome{
+			local var1 = "CCC"
+			echo $var1 $var2 "CCC" "BBB"
+			var1 = "DDD"
+			var2="EEE"
+		}
+		dome 执行函数
+		
+		echo $var1 $var2  "AAA" "EEE"
+		
+		```
+		
 	* 调用
 		
 		```
@@ -255,4 +275,14 @@
 			ABCD 参数...
 			echo "ABCD 执行结果为 $?"
 		
+		```
+	
+	* 命令重载
+
+		```
+		ls(){
+			#调用系统命令
+			command ls -la 
+		}
+		ls
 		```
